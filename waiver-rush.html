@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waiver Rush — Fantasy Football Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zilla+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D9B75F;--gold-hi:#F0CE7A;--cream:#F7F5EC;--dim:#9DAE85;--g0:#0F1A08;--g1:#14200B;--g2:#1B2C10;--g3:#3C5A24;--up:#8FDE4C;--down:#E2703A;--red:#A71930;--block:'Anton',Impact,sans-serif;--body:'Barlow',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--slab:'Zilla Slab',Georgia,serif}
+*{box-sizing:border-box}html,body{margin:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 2px,transparent 2px,transparent 110px),#16260c;color:var(--cream);font-family:var(--body)}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;align-items:center;gap:14px;padding:10px 0 16px;border-bottom:2px solid var(--g3);margin-bottom:18px}
+.logo{height:50px;border-radius:8px}
+.brand{font-family:var(--block);font-size:22px;letter-spacing:1px;color:var(--cream)}.brand small{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+h2{font-family:var(--block);font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.panel{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:16px;margin-bottom:16px}
+.status{font:500 13px var(--mono);color:var(--dim);min-height:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin:10px 0 5px}
+select,input{width:100%;background:var(--g2);border:1px solid var(--g3);color:var(--cream);font:500 14px var(--body);padding:9px 11px;border-radius:9px}
+.seg{display:flex;flex-wrap:wrap;gap:7px}.seg button{background:var(--g0);border:1px solid var(--g3);color:var(--dim);border-radius:7px;padding:8px 12px;font:600 12px var(--mono);text-transform:uppercase}
+.seg button.on{background:var(--gold);border-color:var(--gold);color:var(--g1)}
+.btn{display:block;width:100%;font:700 15px var(--block);letter-spacing:1.5px;text-transform:uppercase;padding:14px;border-radius:10px;border:none;background:var(--gold);color:var(--g1);box-shadow:0 4px 14px rgba(217,183,95,.25);margin-top:8px}
+.btn:hover{background:var(--gold-hi)}.btn.ghost{background:none;border:1px solid var(--g3);color:var(--cream)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.timer{font-family:var(--block);font-size:64px;color:var(--gold);text-align:center;letter-spacing:2px}
+.timer.warn{color:var(--down);animation:pulse .4s infinite alternate}@keyframes pulse{from{opacity:.6}to{opacity:1}}
+.fa{background:var(--g2);border:1px solid var(--g3);border-radius:10px;padding:12px;margin-bottom:10px;transition:.15s}
+.fa.gone{opacity:.3;pointer-events:none}
+.fa .nm{font-family:var(--block);font-size:17px;color:var(--cream)}
+.fa .meta{font:600 11px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.fa .bid{float:right;font:700 14px var(--mono);color:var(--gold)}
+.fa .row2{display:flex;gap:8px;margin-top:8px}
+.fa .row2 input{flex:1}
+.fa .grab{flex:none;background:var(--g3);border:1px solid var(--gold);color:var(--cream);border-radius:8px;padding:8px 14px;font:700 12px var(--mono);text-transform:uppercase}
+.fa.taken{border-color:var(--down)}
+.score{font:700 15px var(--mono);color:var(--gold);text-align:center;margin:8px 0}
+.feed{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:14px;max-height:260px;overflow:auto}
+.row{display:flex;gap:10px;padding:7px 4px;border-bottom:1px solid var(--g2);font:500 13px var(--body);align-items:center}
+.row .ho{margin-left:auto;font:600 11px var(--mono);color:var(--gold)}
+.win{color:var(--up)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 512'><rect width='480' height='512' fill='%232f6d1f'/><rect x='205' y='70' width='70' height='40' rx='6' fill='%23111' stroke='%23f4f6ef' stroke-width='6'/><path d='M240 110 L190 300 h100 Z' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><ellipse cx='240' cy='215' rx='70' ry='52' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><line x1='240' y1='180' x2='240' y2='250' stroke='%23f4f6ef' stroke-width='6'/><text x='240' y='380' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FANTASY</text><text x='240' y='440' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FOOTBALL</text><text x='240' y='495' font-family='Georgia' font-weight='bold' font-size='48' fill='%23f4f6ef' text-anchor='middle'>LAB</text></svg>">
+<div class="brand">WAIVER RUSH<small>Beat the clock · claim the FA before it's gone</small></div>
+</header>
+<div class="grid2">
+  <div class="panel">
+    <h2>Wire Settings</h2>
+    <label>FAAB Budget</label><input id="budget" value="100">
+    <label>Claim Window (seconds)</label><input id="window" value="8">
+    <label>FAAB or Priority</label>
+    <div class="seg" id="typeSeg"><button data-v="faab" class="on">FAAB</button><button data-v="priority">Waiver Priority</button></div>
+    <div class="controls" style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn" id="start">START THE RUSH</button>
+      <button class="btn ghost" id="reset">Reset</button>
+    </div>
+    <div class="status" id="status">Free agents will flash. Bid before the clock hits zero.</div>
+  </div>
+  <div class="panel">
+    <h2>Clock</h2>
+    <div class="timer" id="timer">—</div>
+    <div class="score" id="score">Claims: 0 · Budget left: 100</div>
+    <div class="reel" id="cur"></div>
+  </div>
+</div>
+<div class="panel">
+  <h2>Free Agents</h2>
+  <div id="faList"></div>
+</div>
+<div class="panel">
+  <h2>Claim Log</h2>
+  <div class="feed" id="feed"><div class="status" style="padding:14px;text-align:center">— no claims yet —</div></div>
+</div>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let type='faab',budget=100,windowSec=8,claims=0,timer=null,timeLeft=0,claimed=new Set(),running=false;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function demo(){const n=[['Puka Nacua','LAR','WR'],['Kyren Williams','LAR','RB'],['Zay Flowers','BAL','WR'],['C.J. Stroud','HOU','QB'],['Jaxon Smith-Njigba','SEA','WR'],['Tank Dell','HOU','WR'],['Rachaad White','TB','RB'],['Jayden Reed','GB','WR'],['Rashee Rice','KC','WR'],['Jordan Addison','MIN','WR'],['Dalton Kincaid','BUF','TE'],['Jake Ferguson','DAL','TE'],['James Cook','BUF','RB'],['Royce Freeman','DEN','RB'],['Josh Downs','IND','WR'],['Kendre Miller','NO','RB']];return n.map((x,i)=>({name:x[0],team:x[1],pos:x[2],adp:30+i,id:i}));}
+let players=demo();
+function renderList(){const avail=players.filter(p=>!claimed.has(p.id));$('#faList').innerHTML=avail.map(p=>`<div class="fa" data-id="${p.id}"><span class="bid">${p.pos}</span><div class="nm">${esc(p.name)}</div><div class="meta">${p.team} · ADP ${p.adp}</div><div class="row2"><input type="number" min="0" placeholder="${type==='faab'?'Bid $':'Priority'}" class="bidinput"><button class="grab" data-id="${p.id}">CLAIM</button></div></div>`).join('')||'<div class="status" style="padding:14px;text-align:center">— wire clear —</div>';
+  $$('#faList .grab').forEach(b=>b.onclick=()=>claim(+b.dataset.id));}
+function claim(id){const p=players.find(x=>x.id===id);if(!p||claimed.has(id)||!running)return;const card=$(`.fa[data-id="${id}"]`);const val=+card.querySelector('.bidinput').value||0;
+  if(type==='faab'){if(val>budget){$('#status').textContent='Over budget!';return;}budget-=val;}
+  claimed.add(id);claims++;card.classList.add('taken');card.querySelector('.grab').textContent='CLAIMED';
+  $('#score').textContent=`Claims: ${claims} · Budget left: ${budget}`;
+  const f=$('#feed');f.querySelector('.status')&&(f.innerHTML='');const r=document.createElement('div');r.className='row';r.innerHTML=`<span class="pos" style="font:700 10px var(--mono);background:var(--g3);color:var(--cream);border-radius:5px;padding:2px 6px">${p.pos}</span><span>${esc(p.name)}</span><span class="ho">${type==='faab'?'$'+val:'P'+val}</span>`;f.prepend(r);
+  $('#status').textContent='Claimed '+p.name+'!';}
+function tick(){timeLeft--;const t=$('#timer');t.textContent=timeLeft;if(timeLeft<=3)t.classList.add('warn');else t.classList.remove('warn');if(timeLeft<=0){endRound();}}
+function endRound(){clearInterval(timer);$('#timer').classList.remove('warn');const avail=players.filter(p=>!claimed.has(p.id));if(!avail.length){$('#timer').textContent='DONE';$('#status').textContent='Wire cleared. You claimed '+claims+' players.';running=false;return;}startRound();}
+function startRound(){const avail=shuffle(players.filter(p=>!claimed.has(p.id)));const p=avail[0];$('#cur').innerHTML=`<b style="color:var(--gold)">NOW UP:</b> ${esc(p.name)} (${p.team})`;timeLeft=windowSec;$('#timer').textContent=timeLeft;$('#timer').classList.remove('warn');timer=setInterval(tick,1000);}
+$('#typeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#typeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');type=b.dataset.v;renderList();};
+$('#budget').onchange=e=>budget=+e.target.value;
+$('#window').onchange=e=>windowSec=Math.max(2,+e.target.value);
+$('#start').onclick=()=>{if(running)return;claimed=new Set();claims=0;running=true;$('#score').textContent=`Claims: 0 · Budget left: ${budget}`;renderList();startRound();};
+$('#reset').onclick=()=>{running=false;clearInterval(timer);claimed=new Set();claims=0;$('#timer').textContent='—';$('#timer').classList.remove('warn');$('#score').textContent='Claims: 0 · Budget left: '+budget;$('#cur').textContent='';renderList();$('#status').textContent='Reset.';};
+renderList();
+</script>
+</body>
+</html>

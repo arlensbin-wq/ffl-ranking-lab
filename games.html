@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FF Lab Games — Fantasy Football Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zilla+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D9B75F;--gold-hi:#F0CE7A;--cream:#F7F5EC;--dim:#9DAE85;--g0:#0F1A08;--g1:#14200B;--g2:#1B2C10;--g3:#3C5A24;--up:#8FDE4C;--down:#E2703A;--block:'Anton',Impact,sans-serif;--body:'Barlow',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--slab:'Zilla Slab',Georgia,serif}
+*{box-sizing:border-box}html,body{margin:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 2px,transparent 2px,transparent 110px),#16260c;color:var(--cream);font-family:var(--body)}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 16px 60px}
+header{display:flex;align-items:center;gap:16px;padding:10px 0 18px;border-bottom:2px solid var(--g3);margin-bottom:22px}
+.logo{height:56px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.brand{font-family:var(--block);font-size:30px;letter-spacing:1px;color:var(--cream)}.brand small{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+h1{font-family:var(--block);font-size:38px;letter-spacing:1px;color:var(--gold);text-align:center;margin:0 0 6px;text-transform:uppercase}
+.sub{text-align:center;font:500 13px var(--mono);color:var(--dim);letter-spacing:.08em;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--g1);border:1px solid var(--g3);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:.18s;text-decoration:none}
+.card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.card .ic{font-size:34px}
+.card .nm{font-family:var(--block);font-size:22px;letter-spacing:.5px;color:var(--cream);text-transform:uppercase}
+.card .ds{font:500 13px var(--body);color:var(--dim);line-height:1.5;flex:1}
+.card .tg{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:var(--g2);border-radius:5px;padding:3px 8px;align-self:flex-start}
+footer{text-align:center;font:500 11px var(--mono);color:var(--dim);margin-top:30px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 512'><rect width='480' height='512' fill='%232f6d1f'/><rect x='205' y='70' width='70' height='40' rx='6' fill='%23111' stroke='%23f4f6ef' stroke-width='6'/><path d='M240 110 L190 300 h100 Z' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><ellipse cx='240' cy='215' rx='70' ry='52' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><line x1='240' y1='180' x2='240' y2='250' stroke='%23f4f6ef' stroke-width='6'/><text x='240' y='380' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FANTASY</text><text x='240' y='440' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FOOTBALL</text><text x='240' y='495' font-family='Georgia' font-weight='bold' font-size='48' fill='%23f4f6ef' text-anchor='middle'>LAB</text></svg>">
+<div class="brand">FF LAB GAMES<small>Fantasy Football Lab · Arlen Love</small></div>
+</header>
+<h1>The Game Lab</h1>
+<div class="sub">Five ways to mess with your league · live ADP powered</div>
+<div class="grid">
+  <a class="card" href="mock-draft-gear.html"><div class="ic">⚙️</div><span class="tg">Draft</span><div class="nm">Mock Draft Gear</div><div class="ds">Sleeper-style mock with snake/linear/random spots. Spin the wrench for a twist — “you must draft a QB”, “opponent picks your player”, “within next 12 ADP”.</div></a>
+  <a class="card" href="adp-showdown.html"><div class="ic">⚔️</div><span class="tg">Versus</span><div class="nm">ADP Showdown</div><div class="ds">Two random players face off. Higher consensus ADP wins. Guess the winner or auto-battle 10 bouts.</div></a>
+  <a class="card" href="roster-roulette.html"><div class="ic">🎰</div><span class="tg">Build</span><div class="nm">Roster Roulette</div><div class="ds">Spin each slot to fill a full lineup. Formats: standard, superflex, 3-WR heavy. Unique or repeat players.</div></a>
+  <a class="card" href="waiver-rush.html"><div class="ic">⏱️</div><span class="tg">FAAB</span><div class="nm">Waiver Rush</div><div class="ds">Beat the clock. Claim free agents before the wire closes. FAAB budget or waiver priority modes.</div></a>
+  <a class="card" href="tier-tower.html"><div class="ic">🏗️</div><span class="tg">Board</span><div class="nm">Tier Tower</div><div class="ds">Drag players into tiers and build your draft board. Filter by position, auto-tier by ADP.</div></a>
+  <a class="card" href="index.html"><div class="ic">🏈</div><span class="tg">Main</span><div class="nm">The Ranking Lab</div><div class="ds">The original board builder — drag players, tier/rank, export a shareable image. Plus the Blind Tier spinner.</div></a>
+</div>
+<footer>FF TAPESTRY · THE STRENGTH OF THE TAPESTRY LIES IN ITS THREADS</footer>
+</div>
+</body>
+</html>

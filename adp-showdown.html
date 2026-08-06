@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADP Showdown — Fantasy Football Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zilla+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D9B75F;--gold-hi:#F0CE7A;--cream:#F7F5EC;--dim:#9DAE85;--g0:#0F1A08;--g1:#14200B;--g2:#1B2C10;--g3:#3C5A24;--up:#8FDE4C;--down:#E2703A;--red:#A71930;--block:'Anton',Impact,sans-serif;--body:'Barlow',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--slab:'Zilla Slab',Georgia,serif}
+*{box-sizing:border-box}html,body{margin:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 2px,transparent 2px,transparent 110px),#16260c;color:var(--cream);font-family:var(--body)}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;align-items:center;gap:14px;padding:10px 0 16px;border-bottom:2px solid var(--g3);margin-bottom:18px}
+.logo{height:50px;border-radius:8px}
+.brand{font-family:var(--block);font-size:22px;letter-spacing:1px;color:var(--cream)}.brand small{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+h2{font-family:var(--block);font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.panel{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:16px;margin-bottom:16px}
+.status{font:500 13px var(--mono);color:var(--dim);min-height:18px}
+.err{font:600 12px var(--mono);color:var(--down);margin-top:8px}
+.vs{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px;align-items:center;margin:14px 0}
+.fighter{background:var(--g2);border:1px solid var(--g3);border-radius:12px;padding:14px;text-align:center}
+.fighter.pick{outline:2px solid var(--gold);cursor:pointer}
+.fighter .nm{font-family:var(--block);font-size:22px;color:var(--cream);line-height:1.05}
+.fighter .meta{font:600 11px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.fighter .adp{font:700 13px var(--mono);color:var(--gold);margin-top:8px}
+.vs .mid{font-family:var(--block);font-size:26px;color:var(--gold);text-align:center}
+.score{display:flex;justify-content:center;gap:30px;font:700 14px var(--mono);margin:10px 0}
+.score b{color:var(--gold)}
+.btn{display:block;width:100%;font:700 15px var(--block);letter-spacing:1.5px;text-transform:uppercase;padding:14px;border-radius:10px;border:none;background:var(--gold);color:var(--g1);box-shadow:0 4px 14px rgba(217,183,95,.25);margin-top:8px}
+.btn:hover{background:var(--gold-hi)}.btn.ghost{background:none;border:1px solid var(--g3);color:var(--cream)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.controls{display:flex;gap:10px;flex-wrap:wrap}
+.controls .btn{flex:1;min-width:140px}
+.tag{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;background:var(--g3);color:var(--dim);border-radius:5px;padding:3px 8px;margin:2px 3px 2px 0;display:inline-block}
+.feed{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:14px;max-height:300px;overflow:auto}
+.row{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid var(--g2);font:500 13px var(--body)}
+.row .win{color:var(--up);font-family:var(--mono);font-weight:600;font-size:11px}
+.row .lose{color:var(--down);font-family:var(--mono);font-weight:600;font-size:11px}
+.ct{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ct button{background:var(--g0);border:1px solid var(--g3);color:var(--dim);border-radius:7px;padding:8px 12px;font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.ct button.on{background:var(--gold);border-color:var(--gold);color:var(--g1)}
+label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin:10px 0 5px}
+select{width:100%;background:var(--g2);border:1px solid var(--g3);color:var(--cream);font:500 14px var(--body);padding:9px 11px;border-radius:9px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 512'><rect width='480' height='512' fill='%232f6d1f'/><rect x='205' y='70' width='70' height='40' rx='6' fill='%23111' stroke='%23f4f6ef' stroke-width='6'/><path d='M240 110 L190 300 h100 Z' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><ellipse cx='240' cy='215' rx='70' ry='52' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><line x1='240' y1='180' x2='240' y2='250' stroke='%23f4f6ef' stroke-width='6'/><text x='240' y='380' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FANTASY</text><text x='240' y='440' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FOOTBALL</text><text x='240' y='495' font-family='Georgia' font-weight='bold' font-size='48' fill='%23f4f6ef' text-anchor='middle'>LAB</text></svg>">
+<div class="brand">ADP SHOWDOWN<small>Higher ADP wins · pick the side you trust</small></div>
+</header>
+
+<div class="panel">
+  <h2>Match Setup</h2>
+  <label>Position Pool</label>
+  <div class="ct" id="posCt">
+    <button data-v="ALL" class="on">All</button><button data-v="QB">QB</button><button data-v="RB">RB</button><button data-v="WR">WR</button><button data-v="TE">TE</button>
+  </div>
+  <label>Mode</label>
+  <div class="ct" id="modeCt">
+    <button data-v="guess" class="on">You Guess Winner</button><button data-v="auto">Auto Battle</button>
+  </div>
+  <div class="controls">
+    <button class="btn" id="nextBtn">Next Matchup →</button>
+    <button class="btn ghost" id="autoBtn">Auto-Battle 10</button>
+    <button class="btn ghost" id="loadBtn">Load Live ADP</button>
+  </div>
+  <div class="status" id="status">Two random players face off. Higher consensus ADP wins.</div>
+  <div class="err" id="err"></div>
+</div>
+
+<div class="panel">
+  <div class="vs">
+    <div class="fighter pick" id="left" data-side="0"><div class="nm">—</div><div class="meta">—</div><div class="adp">ADP —</div></div>
+    <div class="mid">VS</div>
+    <div class="fighter pick" id="right" data-side="1"><div class="nm">—</div><div class="meta">—</div><div class="adp">ADP —</div></div>
+  </div>
+  <div class="score"><span>YOU <b id="yw">0</b></span><span>HOUSE <b id="hw">0</b></span></div>
+  <div class="controls" id="guessCtrls"><button class="btn" id="pickLeft">Pick LEFT</button><button class="btn ghost" id="pickRight">Pick RIGHT</button></div>
+</div>
+
+<div class="panel">
+  <h2>Recent Bouts</h2>
+  <div class="feed" id="feed"><div class="status" style="padding:20px;text-align:center">— no bouts yet —</div></div>
+</div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let players=[],filter='ALL',mode='guess',you=0,house=0,cur=null;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function demo(){const n=[['Christian McCaffrey','SF','RB'],['Bijan Robinson','ATL','RB'],['Tyreek Hill','MIA','WR'],['CeeDee Lamb','DAL','WR'],['Justin Jefferson','MIN','WR'],['Ja\'Marr Chase','CIN','WR'],['Amon-Ra St. Brown','DET','WR'],['Breece Hall','NYJ','RB'],['Travis Kelce','KC','TE'],['Patrick Mahomes','KC','QB'],['Josh Allen','BUF','QB'],['Lamar Jackson','BAL','QB'],['A.J. Brown','PHI','WR'],['Garrett Wilson','NYJ','WR'],['Derrick Henry','BAL','RB'],['Saquon Barkley','PHI','RB'],['Puka Nacua','LAR','WR'],['T.J. Hockenson','MIN','TE'],['Joe Burrow','CIN','QB'],['Jahmyr Gibbs','DET','RB']];return n.map((x,i)=>({name:x[0],team:x[1],pos:x[2],adp:i+1,id:i}));}
+async function loadADP(){try{$('#status').textContent='Loading FantasyPros ADP…';const res=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent('https://www.fantasypros.com/nfl/rankings/consensus-cheatsheets.php'));if(!res.ok)throw new Error('proxy');const t=await res.text();const out=[];const re=/<tr[^>]*>[\s\S]*?<a[^>]*class="player-name"[^>]*>([^<]+)<\/a>[\s\S]*?<\/tr>/g;let m;while((m=re.exec(t))){const row=m[0];const nm=m[1].trim();const teamM=row.match(/\(([A-Z]{2,3})\)/);const posM=row.match(/class="position"[^>]*>([A-Z]+)</i);const adpM=row.match(/([\d.]+)<\/td>\s*<\/tr>/);const p={name:nm,team:teamM?teamM[1]:'?',pos:posM?posM[1]:'FLEX',adp:adpM?+adpM[1]:out.length+1,id:out.length};out.push(p);}if(!out.length)throw new Error('empty');players=out;pool();$('#status').textContent='Loaded '+out.length+' players from FantasyPros.';}catch(e){$('#err').textContent='Live ADP failed: '+e.message+' (using demo).';players=demo();pool();}}
+function pool(){return players.filter(p=>filter==='ALL'||p.pos===filter).sort((a,b)=>a.adp-b.adp);}
+function nextMatch(){const p=pool();if(p.length<2){$('#status').textContent='Not enough players in pool.';return;}$('#feed').querySelector('.status')&&($('#feed').innerHTML='');const a=shuffle(p.slice())[0];let b;a!==b;do{b=shuffle(p.slice())[0];}while(b.id===a.id);cur={a,b};render();}
+function render(){if(!cur)return;const f=(p,el)=>{el.querySelector('.nm').textContent=p.name;el.querySelector('.meta').textContent=p.pos+' · '+p.team;el.querySelector('.adp').textContent='ADP '+p.adp;};f(cur.a,$('#left'));f(cur.b,$('#right'));$('#guessCtrls').style.display=mode==='guess'?'flex':'none';}
+function decide(winSide){if(!cur)return;const win=winSide===0?cur.a:cur.b;const lose=winSide===0?cur.b:cur.a;const adpWin=win.adp,adpLose=lose.adp;const adpWins=adpWin<adpLose;const youRight=mode==='guess'? (winSide===0):adpWins;if(adpWins)house++;else you++;if(mode==='guess'){if(winSide===0)you++;else house++;}
+  // correct: ADP lower = better. If ADP pick matches the side with lower ADP, "you" win when guessing.
+  const correctSide=adpWin<adpLose?0:1;const youWin=mode==='guess'?(winSide===correctSide):(adpWins);
+  you=0;house=0; // recompute cleanly below
+  // recompute
+  if(youWin)you++;else house++;
+  $('#yw').textContent=you;$('#hw').textContent=house;
+  const cls=youWin?'win':'lose';const opp=youWin?'lose':'win';
+  const row=document.createElement('div');row.className='row';
+  row.innerHTML=`<span>${esc(cur.a.name)} <small style="color:var(--dim)">(ADP ${cur.a.adp})</small></span><span class="${cls}" style="margin-left:auto">${youWin?'✓ YOU':'✗'}</span><span style="width:14px"></span><span class="${opp}">${youWin?'✗':'✓ HOUSE'}</span><span>${esc(cur.b.name)} <small style="color:var(--dim)">(ADP ${cur.b.adp})</small></span>`;
+  $('#feed').prepend(row);
+  cur=null;$('#status').textContent=youWin?'You read the board. ':'House takes it — ADP decided.';
+}
+$('#posCt').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#posCt button').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.v;nextMatch();};
+$('#modeCt').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#modeCt button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.v;$('#guessCtrls').style.display=mode==='guess'?'flex':'none';};
+$('#nextBtn').onclick=nextMatch;
+$('#pickLeft').onclick=()=>decide(0);
+$('#pickRight').onclick=()=>decide(1);
+$('#autoBtn').onclick=()=>{let n=10;const iv=setInterval(()=>{if(n--<=0){clearInterval(iv);return;}nextMatch();const correct=cur.a.adp<cur.b.adp?0:1;decide(correct);},350);};
+$('#loadBtn').onclick=loadADP;
+players=demo();nextMatch();
+</script>
+</body>
+</html>

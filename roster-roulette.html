@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roster Roulette — Fantasy Football Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zilla+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D9B75F;--gold-hi:#F0CE7A;--cream:#F7F5EC;--dim:#9DAE85;--g0:#0F1A08;--g1:#14200B;--g2:#1B2C10;--g3:#3C5A24;--up:#8FDE4C;--down:#E2703A;--block:'Anton',Impact,sans-serif;--body:'Barlow',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--slab:'Zilla Slab',Georgia,serif}
+*{box-sizing:border-box}html,body{margin:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 2px,transparent 2px,transparent 110px),#16260c;color:var(--cream);font-family:var(--body)}
+.wrap{max-width:1040px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;align-items:center;gap:14px;padding:10px 0 16px;border-bottom:2px solid var(--g3);margin-bottom:18px}
+.logo{height:50px;border-radius:8px}
+.brand{font-family:var(--block);font-size:22px;letter-spacing:1px;color:var(--cream)}.brand small{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+h2{font-family:var(--block);font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.panel{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:16px;margin-bottom:16px}
+.status{font:500 13px var(--mono);color:var(--dim);min-height:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin:10px 0 5px}
+select{width:100%;background:var(--g2);border:1px solid var(--g3);color:var(--cream);font:500 14px var(--body);padding:9px 11px;border-radius:9px}
+.seg{display:flex;flex-wrap:wrap;gap:7px}.seg button{background:var(--g0);border:1px solid var(--g3);color:var(--dim);border-radius:7px;padding:8px 12px;font:600 12px var(--mono);text-transform:uppercase}
+.seg button.on{background:var(--gold);border-color:var(--gold);color:var(--g1)}
+.btn{display:block;width:100%;font:700 15px var(--block);letter-spacing:1.5px;text-transform:uppercase;padding:14px;border-radius:10px;border:none;background:var(--gold);color:var(--g1);box-shadow:0 4px 14px rgba(217,183,95,.25);margin-top:8px}
+.btn:hover{background:var(--gold-hi)}.btn.ghost{background:none;border:1px solid var(--g3);color:var(--cream)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:6px}
+.slot{background:var(--g2);border:1px solid var(--g3);border-radius:10px;padding:12px;text-align:center;min-height:96px;display:flex;flex-direction:column;justify-content:center;transition:.2s}
+.slot.spin{animation:pls .5s ease-in-out infinite alternate}@keyframes pls{from{opacity:.4}to{opacity:1}}
+.slot.filled{outline:1px solid var(--gold)}
+.slot .pos{font:700 11px var(--mono);letter-spacing:.14em;color:var(--dim)}
+.slot .nm{font-family:var(--block);font-size:16px;color:var(--cream);line-height:1.05;margin-top:6px}
+.slot .tm{font:500 10px var(--mono);color:var(--dim);margin-top:3px}
+.reel{font:700 13px var(--mono);color:var(--gold);text-align:center;margin-top:10px;min-height:18px}
+.feed{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:14px;max-height:280px;overflow:auto}
+.row{display:flex;gap:10px;padding:7px 4px;border-bottom:1px solid var(--g2);font:500 13px var(--body);align-items:center}
+.row .pos{font:700 10px var(--mono);background:var(--g3);color:var(--cream);border-radius:5px;padding:2px 6px}
+.row .ho{margin-left:auto;font:600 11px var(--mono);color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 512'><rect width='480' height='512' fill='%232f6d1f'/><rect x='205' y='70' width='70' height='40' rx='6' fill='%23111' stroke='%23f4f6ef' stroke-width='6'/><path d='M240 110 L190 300 h100 Z' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><ellipse cx='240' cy='215' rx='70' ry='52' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><line x1='240' y1='180' x2='240' y2='250' stroke='%23f4f6ef' stroke-width='6'/><text x='240' y='380' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FANTASY</text><text x='240' y='440' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FOOTBALL</text><text x='240' y='495' font-family='Georgia' font-weight='bold' font-size='48' fill='%23f4f6ef' text-anchor='middle'>LAB</text></svg>">
+<div class="brand">ROSTER ROULETTE<small>Spin each slot · build a starting lineup</small></div>
+</header>
+<div class="grid2">
+  <div class="panel">
+    <h2>Setup</h2>
+    <label>Lineup Format</label>
+    <div class="seg" id="fmtSeg">
+      <button data-v="std" class="on">1QB/2RB/2WR/TE/FLEX</button>
+      <button data-v="super">Superflex</button>
+      <button data-v="heavy">3WR Heavy</button>
+    </div>
+    <label>Player Pool</label>
+    <div class="seg" id="poolSeg">
+      <button data-v="top" class="on">Top 60 ADP</button>
+      <button data-v="all">All Available</button>
+    </div>
+    <label>Duplicate Players Across Slots?</label>
+    <div class="seg" id="dupSeg">
+      <button data-v="no" class="on">No (unique)</button>
+      <button data-v="yes">Yes</button>
+    </div>
+    <div class="controls" style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn" id="spinAll">SPIN ALL SLOTS</button>
+      <button class="btn ghost" id="reset">Reset</button>
+    </div>
+    <div class="status" id="status">Pick a format and spin.</div>
+  </div>
+  <div class="panel">
+    <h2>Your Lineup</h2>
+    <div class="slots" id="slots"></div>
+    <div class="reel" id="reel"></div>
+  </div>
+</div>
+<div class="panel">
+  <h2>Spin Log</h2>
+  <div class="feed" id="feed"><div class="status" style="padding:14px;text-align:center">— no spins yet —</div></div>
+</div>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let fmt='std',poolMode='top',dup='no',players=[],used=new Set();
+const FORMATS={std:['QB','RB','RB','WR','WR','TE','FLEX'],super:['QB','RB','RB','WR','WR','TE','FLEX','SF'],heavy:['QB','RB','RB','WR','WR','WR','TE','FLEX']};
+const POSLABEL={QB:'QB',RB:'RB',WR:'WR',TE:'TE',FLEX:'FLEX',SF:'SUPERFLEX'};
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function demo(){const n=[['Christian McCaffrey','SF','RB'],['Bijan Robinson','ATL','RB'],['Tyreek Hill','MIA','WR'],['CeeDee Lamb','DAL','WR'],['Justin Jefferson','MIN','WR'],['Ja\'Marr Chase','CIN','WR'],['Amon-Ra St. Brown','DET','WR'],['Breece Hall','NYJ','RB'],['Travis Kelce','KC','TE'],['Patrick Mahomes','KC','QB'],['Josh Allen','BUF','QB'],['Lamar Jackson','BAL','QB'],['A.J. Brown','PHI','WR'],['Garrett Wilson','NYJ','WR'],['Derrick Henry','BAL','RB'],['Saquon Barkley','PHI','RB'],['Puka Nacua','LAR','WR'],['T.J. Hockenson','MIN','TE'],['Joe Burrow','CIN','QB'],['Jahmyr Gibbs','DET','RB'],['Chris Olave','NO','WR'],['DeVonta Smith','PHI','WR'],['Tony Pollard','TEN','RB'],['Kenneth Walker','SEA','RB'],['Mark Andrews','BAL','TE'],['Sam LaPorta','DET','TE'],['Tua Tagovailoa','MIA','QB'],['Jalen Hurts','PHI','QB'],['DK Metcalf','SEA','WR'],['Stefon Diggs','HOU','WR']];return n.map((x,i)=>({name:x[0],team:x[1],pos:x[2],adp:i+1,id:i}));}
+function candidates(pos){const elig=pos==='FLEX'?['RB','WR','TE']:pos==='SF'?['QB','RB','WR','TE']:[pos];return players.filter(p=>elig.includes(p.pos)&&(dup==='yes'||!used.has(p.id))).sort((a,b)=>a.adp-b.adp);}
+function renderSlots(){const f=FORMATS[fmt];$('#slots').innerHTML=f.map((pos,i)=>`<div class="slot ${used.has('s'+i)?'filled':''}" data-i="${i}" data-pos="${pos}"><div class="pos">${POSLABEL[pos]}</div><div class="nm" id="nm${i}">—</div><div class="tm" id="tm${i}"></div></div>`).join('');}
+function spinSlot(i,pos){const el=$(`.slot[data-i="${i}"]`);el.classList.add('spin');const pool=candidates(pos);if(!pool.length){el.classList.remove('spin');$('#reel').textContent='Pool empty for '+POSLABEL[pos];return;}
+  const picks=shuffle(pool.slice());let k=0;$('#reel').textContent='spinning '+POSLABEL[pos]+'…';const iv=setInterval(()=>{const p=picks[k%picks.length];$(`#nm${i}`).textContent=p.name;$(`#tm${i}`).textContent=p.team+' · ADP '+p.adp;k++;if(k>=14){clearInterval(iv);const chosen=picks[Math.floor(Math.random()*picks.length)];$(`#nm${i}`).textContent=chosen.name;$(`#tm${i}`).textContent=chosen.team+' · ADP '+chosen.adp;el.classList.remove('spin');el.classList.add('filled');if(dup==='no')used.add(chosen.id);log(pos,chosen);if(used.size===FORMATS[fmt].length)$('#status').textContent='Lineup complete!';}},90);}
+function log(pos,p){const f=$('#feed');f.querySelector('.status')&&(f.innerHTML='');const r=document.createElement('div');r.className='row';r.innerHTML=`<span class="pos">${POSLABEL[pos]}</span><span>${esc(p.name)}</span><span class="ho">${p.team} · ADP ${p.adp}</span>`;f.prepend(r);}
+function spinAll(){used=new Set();renderSlots();const f=FORMATS[fmt];f.forEach((pos,i)=>setTimeout(()=>spinSlot(i,pos),i*450));$('#status').textContent='Spinning '+f.length+' slots…';}
+$('#fmtSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#fmtSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');fmt=b.dataset.v;used=new Set();renderSlots();};
+$('#poolSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#poolSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');poolMode=b.dataset.v;};
+$('#dupSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#dupSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');dup=b.dataset.v;used=new Set();renderSlots();};
+$('#spinAll').onclick=spinAll;
+$('#reset').onclick=()=>{used=new Set();renderSlots();$('#feed').innerHTML='<div class="status" style="padding:14px;text-align:center">— no spins yet —</div>';$('#reel').textContent='';$('#status').textContent='Reset.';};
+players=demo();renderSlots();
+</script>
+</body>
+</html>

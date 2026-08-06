@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tier Tower — Fantasy Football Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zilla+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D9B75F;--gold-hi:#F0CE7A;--cream:#F7F5EC;--dim:#9DAE85;--g0:#0F1A08;--g1:#14200B;--g2:#1B2C10;--g3:#3C5A24;--up:#8FDE4C;--down:#E2703A;--block:'Anton',Impact,sans-serif;--body:'Barlow',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--slab:'Zilla Slab',Georgia,serif}
+*{box-sizing:border-box}html,body{margin:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 2px,transparent 2px,transparent 110px),#16260c;color:var(--cream);font-family:var(--body)}
+.wrap{max-width:1040px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;align-items:center;gap:14px;padding:10px 0 16px;border-bottom:2px solid var(--g3);margin-bottom:18px}
+.logo{height:50px;border-radius:8px}
+.brand{font-family:var(--block);font-size:22px;letter-spacing:1px;color:var(--cream)}.brand small{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+h2{font-family:var(--block);font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.panel{background:var(--g1);border:1px solid var(--g3);border-radius:12px;padding:16px;margin-bottom:16px}
+.status{font:500 13px var(--mono);color:var(--dim);min-height:18px}
+.grid2{display:grid;grid-template-columns:300px 1fr;gap:16px}@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin:10px 0 5px}
+select{width:100%;background:var(--g2);border:1px solid var(--g3);color:var(--cream);font:500 14px var(--body);padding:9px 11px;border-radius:9px}
+.seg{display:flex;flex-wrap:wrap;gap:7px}.seg button{background:var(--g0);border:1px solid var(--g3);color:var(--dim);border-radius:7px;padding:8px 12px;font:600 12px var(--mono);text-transform:uppercase}
+.seg button.on{background:var(--gold);border-color:var(--gold);color:var(--g1)}
+.btn{display:block;width:100%;font:700 15px var(--block);letter-spacing:1.5px;text-transform:uppercase;padding:14px;border-radius:10px;border:none;background:var(--gold);color:var(--g1);box-shadow:0 4px 14px rgba(217,183,95,.25);margin-top:8px}
+.btn:hover{background:var(--gold-hi)}.btn.ghost{background:none;border:1px solid var(--g3);color:var(--cream)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.pool{display:flex;flex-wrap:wrap;gap:8px;max-height:420px;overflow:auto}
+.chip{background:var(--g2);border:1px solid var(--g3);border-radius:9px;padding:8px 11px;cursor:grab;transition:.12s;user-select:none}
+.chip:hover{border-color:var(--gold)}
+.chip .nm{font-weight:700;font-size:13px}
+.chip .tm{font:500 9px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.chip.dragging{opacity:.4}
+.tower{display:flex;flex-direction:column;gap:10px}
+.tier{background:var(--g2);border:1px solid var(--g3);border-radius:11px;padding:10px;min-height:64px}
+.tier .hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tier .tg{font-family:var(--block);font-size:16px;color:var(--gold);letter-spacing:1px}
+.tier .cnt{font:600 10px var(--mono);color:var(--dim);margin-left:auto}
+.tier .drop{display:flex;flex-wrap:wrap;gap:8px;min-height:34px}
+.tier.over{outline:2px dashed var(--gold)}
+.score{font:700 14px var(--mono);color:var(--gold);text-align:center;margin:8px 0}
+.addtier{font:600 11px var(--mono);background:var(--g0);border:1px solid var(--g3);color:var(--dim);border-radius:7px;padding:7px 11px;text-transform:uppercase;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 512'><rect width='480' height='512' fill='%232f6d1f'/><rect x='205' y='70' width='70' height='40' rx='6' fill='%23111' stroke='%23f4f6ef' stroke-width='6'/><path d='M240 110 L190 300 h100 Z' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><ellipse cx='240' cy='215' rx='70' ry='52' fill='%23111' stroke='%23f4f6ef' stroke-width='8'/><line x1='240' y1='180' x2='240' y2='250' stroke='%23f4f6ef' stroke-width='6'/><text x='240' y='380' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FANTASY</text><text x='240' y='440' font-family='Georgia' font-weight='bold' font-size='52' fill='%23f4f6ef' text-anchor='middle'>FOOTBALL</text><text x='240' y='495' font-family='Georgia' font-weight='bold' font-size='48' fill='%23f4f6ef' text-anchor='middle'>LAB</text></svg>">
+<div class="brand">TIER TOWER<small>Drag players into tiers · build your board</small></div>
+</header>
+<div class="grid2">
+  <div class="panel">
+    <h2>Player Pool</h2>
+    <label>Filter Position</label>
+    <div class="seg" id="posSeg">
+      <button data-v="ALL" class="on">All</button><button data-v="QB">QB</button><button data-v="RB">RB</button><button data-v="WR">WR</button><button data-v="TE">TE</button>
+    </div>
+    <label>Sort</label>
+    <div class="seg" id="sortSeg">
+      <button data-v="adp" class="on">By ADP</button><button data-v="name">By Name</button>
+    </div>
+    <div class="status" id="status">Drag chips into tiers. Click a tier's + to add one.</div>
+    <div class="pool" id="pool"></div>
+  </div>
+  <div class="panel">
+    <h2>Tier Tower</h2>
+    <div class="score" id="score"></div>
+    <button class="addtier" id="addTier">+ ADD TIER</button>
+    <div class="tower" id="tower" style="margin-top:10px"></div>
+    <div class="controls" style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn ghost" id="auto">Auto-Tier by ADP</button>
+      <button class="btn ghost" id="clear">Clear</button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let filter='ALL',sortBy='adp',players=[];
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function demo(){const n=[['Christian McCaffrey','SF','RB'],['Bijan Robinson','ATL','RB'],['Tyreek Hill','MIA','WR'],['CeeDee Lamb','DAL','WR'],['Justin Jefferson','MIN','WR'],['Ja\'Marr Chase','CIN','WR'],['Amon-Ra St. Brown','DET','WR'],['Breece Hall','NYJ','RB'],['Travis Kelce','KC','TE'],['Patrick Mahomes','KC','QB'],['Josh Allen','BUF','QB'],['Lamar Jackson','BAL','QB'],['A.J. Brown','PHI','WR'],['Garrett Wilson','NYJ','WR'],['Derrick Henry','BAL','RB'],['Saquon Barkley','PHI','RB'],['Puka Nacua','LAR','WR'],['T.J. Hockenson','MIN','TE'],['Joe Burrow','CIN','QB'],['Jahmyr Gibbs','DET','RB'],['Chris Olave','NO','WR'],['DeVonta Smith','PHI','WR'],['Tony Pollard','TEN','RB'],['Kenneth Walker','SEA','RB'],['Mark Andrews','BAL','TE'],['Sam LaPorta','DET','TE'],['Tua Tagovailoa','MIA','QB'],['Jalen Hurts','PHI','QB'],['DK Metcalf','SEA','WR'],['Stefon Diggs','HOU','WR']];return n.map((x,i)=>({name:x[0],team:x[1],pos:x[2],adp:i+1,id:i}));}
+function renderPool(){let p=players.filter(x=>filter==='ALL'||x.pos===filter);p=p.sort((a,b)=>sortBy==='adp'?a.adp-b.adp:a.name.localeCompare(b.name));
+  $('#pool').innerHTML=p.map(x=>`<div class="chip" draggable="true" data-id="${x.id}"><div class="nm">${esc(x.name)}</div><div class="tm">${x.pos} · ADP ${x.adp}</div></div>`).join('');
+  $$('#pool .chip').forEach(c=>{c.ondragstart=e=>{e.dataTransfer.setData('text/plain',c.dataset.id);c.classList.add('dragging');};c.ondragend=()=>c.classList.remove('dragging');});}
+let tiers=[{name:'Tier 1',ids:[]},{name:'Tier 2',ids:[]},{name:'Tier 3',ids:[]}];
+function renderTower(){const placed=new Set(tiers.flatMap(t=>t.ids));
+  $('#tower').innerHTML=tiers.map((t,i)=>`<div class="tier" data-i="${i}"><div class="hd"><span class="tg">${esc(t.name)}</span><span class="cnt">${t.ids.length} players</span></div><div class="drop" data-i="${i}">${t.ids.map(id=>{const p=players.find(x=>x.id===id);return `<div class="chip" draggable="true" data-id="${id}"><div class="nm">${esc(p.name)}</div><div class="tm">${p.pos} · ADP ${p.adp}</div></div>`;}).join('')}</div></div>`).join('');
+  $$('#tower .tier').forEach(t=>{const i=+t.dataset.i;t.ondragover=e=>{e.preventDefault();t.classList.add('over');};t.ondragleave=()=>t.classList.remove('over');t.ondrop=e=>{e.preventDefault();t.classList.remove('over');const id=+e.dataTransfer.getData('text/plain');moveTo(id,i);};});
+  $$('#tower .chip').forEach(c=>{c.ondragstart=e=>{e.dataTransfer.setData('text/plain',c.dataset.id);c.classList.add('dragging');};c.ondragend=()=>c.classList.remove('dragging');});
+  // pool shows only unplaced
+  let pool=players.filter(x=>filter==='ALL'||x.pos===filter);pool=pool.filter(x=>!placed.has(x.id)).sort((a,b)=>sortBy==='adp'?a.adp-b.adp:a.name.localeCompare(b.name));
+  $('#pool').innerHTML=pool.map(x=>`<div class="chip" draggable="true" data-id="${x.id}"><div class="nm">${esc(x.name)}</div><div class="tm">${x.pos} · ADP ${x.adp}</div></div>`).join('')||'<div class="status" style="padding:14px">All placed.</div>';
+  $$('#pool .chip').forEach(c=>{c.ondragstart=e=>{e.dataTransfer.setData('text/plain',c.dataset.id);c.classList.add('dragging');};c.ondragend=()=>c.classList.remove('dragging');});
+  const total=tiers.reduce((s,t)=>s+t.ids.length,0);$('#score').textContent=`${tiers.length} tiers · ${total}/${players.length} placed`;
+}
+function moveTo(id,tierIdx){for(const t of tiers)t.ids=t.ids.filter(x=>x!==id);tiers[tierIdx].ids.push(id);renderTower();}
+function autoTier(){const byAdp=players.slice().sort((a,b)=>a.adp-b.adp);const cuts=[10,20,30];tiers=[{name:'Tier 1 (Elite)',ids:[]},{name:'Tier 2 (Starters)',ids:[]},{name:'Tier 3 (Depth)',ids:[]},{name:'Tier 4 (Fliers)',ids:[]}];byAdp.forEach((p,i)=>{if(i<cuts[0])tiers[0].ids.push(p.id);else if(i<cuts[1])tiers[1].ids.push(p.id);else if(i<cuts[2])tiers[2].ids.push(p.id);else tiers[3].ids.push(p.id);});renderTower();}
+$('#posSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#posSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.v;renderTower();};
+$('#sortSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#sortSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');sortBy=b.dataset.v;renderTower();};
+$('#addTier').onclick=()=>{tiers.push({name:'Tier '+(tiers.length+1),ids:[]});renderTower();};
+$('#auto').onclick=autoTier;
+$('#clear').onclick=()=>{tiers=[{name:'Tier 1',ids:[]},{name:'Tier 2',ids:[]},{name:'Tier 3',ids:[]}];renderTower();};
+players=demo();renderTower();
+</script>
+</body>
+</html>
